@@ -1,0 +1,24 @@
+{
+  "name": "lambda-optimize-image",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Lambda function to optimize images uploaded to S3",
+  "author": "Robin Métral <robin@metral.ch>",
+  "license": "MIT",
+  "main": "index.js",
+  "repository": "https://github.com/robinmetral/lambda-optimize-image",
+  "dependencies": {
+    "async": "^3.1.0",
+    "exif-reader": "^1.0.3",
+    "file-type": "^12.4.2",
+    "read-chunk": "^3.2.0",
+    "sharp": "^0.23.4"
+  },
+  "scripts": {
+    "clean": "aws lambda delete-function --function-name optimizeImage && rm -rf optimizeImage.zip",
+    "zip": "zip -r optimizeImage.zip node_modules index.js helpers.js",
+    "create": "aws lambda create-function --function-name optimizeImage --zip-file fileb://optimizeImage.zip --handler index.handler --runtime nodejs12.x --timeout 10 --memory-size 1024 --role $AWS_ROLE",
+    "deploy": "npm run zip && npm run create",
+    "test": "echo // TODO write tests"
+  }
+}
